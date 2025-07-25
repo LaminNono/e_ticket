@@ -116,8 +116,7 @@ $totalUsers = $stmt->fetchColumn() ?? 0;
                     <i class="bi bi-grid"></i> Dashboard
                 </a>
 
-                <a href="/admin/bookings.php"
-                    class="nav-link <?= ($current == '/admin/bookings.php') ? 'active' : '' ?>">
+                <a href="bookings.php" class="nav-link <?= ($current == 'bookings.php') ? 'active' : '' ?>">
                     <i class="bi bi-ticket-detailed"></i> Bookings
                 </a>
 
