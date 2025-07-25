@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               $_SESSION['user']    = $user['name'];
               $_SESSION['role']    = $user['role'];                       // ★ CHANGED
               $target = ($user['role'] === 'admin')
-          ? ADMIN_HOME         // ★ CHANGED: resolves to admin/admin.php
+          ? ADMIN_HOME         // resolves to dashboard.php
           : 'index.php';
 header("Location: $target");
 exit();

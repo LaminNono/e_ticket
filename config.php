@@ -20,6 +20,6 @@ try {
 /* ──────────────────────────────────────────────────────────
    Admin landing page, reused across the project
    ──────────────────────────────────────────────────────── */
-define('ADMIN_HOME', 'admin/dashboard.php');   // ★ CHANGED (was admin/dashboard.php)
+define('ADMIN_HOME', 'dashboard.php');
 
 ?>

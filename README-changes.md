@@ -175,7 +175,7 @@ if (isset($_GET['debug_session'])) {
 }
 ```
 
-Then visit e.g. `admin/dashboard.php?debug_session=1` to see your session contents.
+Then visit e.g. `dashboard.php?debug_session=1` to see your session contents.
 
 ---
 

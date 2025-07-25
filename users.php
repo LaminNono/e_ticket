@@ -9,9 +9,9 @@ if (isset($_GET['debug_session'])) {
     print_r($_SESSION);
     echo '</pre>';
 }
-require '../config.php';
+require 'config.php';
 if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 $users = $pdo->query("SELECT * FROM users")->fetchAll();
