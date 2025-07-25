@@ -135,6 +135,50 @@ Admin forms were vulnerable to CSRF attacks and lacked robust server-side valida
 
 ---
 
+## Troubleshooting: Admin Pages Redirect to index.php
+
+### Problem
+
+After logging in as admin, navigating to other admin pages (e.g., sales.php, bookings.php) sometimes redirects you to index.php instead of the intended admin page.
+
+### Possible Causes
+
+- Session is not being preserved between requests (session loss).
+- Session cookie issues (path, domain, browser settings).
+- Accidental session destruction (e.g., session_destroy() called unexpectedly).
+- PHP misconfiguration (session.save_path, session.cookie_path, etc.).
+- Using different hostnames (localhost vs 127.0.0.1 vs machine name).
+- Browser extensions or privacy settings blocking cookies.
+
+### Debugging Steps
+
+1. Ensure every admin page starts with `session_start();`.
+2. Check that `session_destroy()` and `session_unset()` are only called in logout.php.
+3. Try a different browser or incognito mode to rule out browser issues.
+4. Check your browser's cookies for PHPSESSID and see if it changes between requests.
+5. Check your PHP error log for session-related errors.
+6. In `php.ini`, ensure:
+   - `session.save_path` is writable
+   - `session.cookie_path` is `/`
+   - `session.cookie_domain` is not set incorrectly
+7. Add debugging code to print session info on admin pages (see below).
+
+### Debugging Code Example
+
+Add this to the top of your admin PHP files (after `session_start();`) to print session info:
+
+```php
+if (isset($_GET['debug_session'])) {
+    echo '<pre>';
+    print_r($_SESSION);
+    echo '</pre>';
+}
+```
+
+Then visit e.g. `admin/dashboard.php?debug_session=1` to see your session contents.
+
+---
+
 **Next planned step:**
 
 - Add pagination and search to large tables for better usability.

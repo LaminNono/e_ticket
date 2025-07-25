@@ -1,5 +1,14 @@
 <?php
 session_start();
+if (isset($_GET['debug_session'])) {
+    echo '<pre style="background:#222;color:#0f0;padding:10px;">SESSION DEBUG\n';
+    echo 'session_id: ' . session_id() . "\n";
+    echo '\n$_COOKIE:\n';
+    print_r($_COOKIE);
+    echo '\n$_SESSION:\n';
+    print_r($_SESSION);
+    echo '</pre>';
+}
 require '../config.php';
 
 // Admin guard
