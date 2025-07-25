@@ -47,9 +47,12 @@ $bookings = $stmt->fetchAll();
 </head>
 
 <body class="bg-light">
-    <div class="container py-4">
-        <h2 class="mb-4">Manage Bookings</h2>
-        <table class="table table-bordered table-hover">
+    <div class="container-fluid">
+        <div class="row">
+            <?php include 'sidebar.php'; ?>
+            <div class="col-md-10 py-4">
+                <h2 class="mb-4">Manage Bookings</h2>
+                <table class="table table-bordered table-hover">
             <thead class="table-primary">
                 <tr>
                     <th>ID</th>

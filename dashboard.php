@@ -18,8 +18,14 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
   exit();
 }
 
-$stmt = $pdo->query("SELECT SUM(total_price) FROM bookings");
-$totalRevenue = $stmt->fetchColumn() ?? 0;
+
+// Check if 'total_price' column exists in 'bookings' table
+$totalRevenue = 0;
+$checkCol = $pdo->query("SHOW COLUMNS FROM bookings LIKE 'total_price'");
+if ($checkCol && $checkCol->rowCount() > 0) {
+    $stmt = $pdo->query("SELECT SUM(total_price) FROM bookings");
+    $totalRevenue = $stmt->fetchColumn() ?? 0;
+}
 
 $stmt = $pdo->query("SELECT COUNT(*) FROM bookings");
 $totalOrders = $stmt->fetchColumn() ?? 0;
@@ -107,36 +113,7 @@ $totalUsers = $stmt->fetchColumn() ?? 0;
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar">
-                <h4 class="text-white mb-4">Admin Panel</h4>
-
-                <?php $current = basename($_SERVER['PHP_SELF']); ?>
-
-                <a href="dashboard.php" class="nav-link <?= ($current == 'dashboard.php') ? 'active' : '' ?>">
-                    <i class="bi bi-grid"></i> Dashboard
-                </a>
-
-                <a href="bookings.php" class="nav-link <?= ($current == 'bookings.php') ? 'active' : '' ?>">
-                    <i class="bi bi-ticket-detailed"></i> Bookings
-                </a>
-
-                <a href="routes.php" class="nav-link <?= ($current == 'routes.php') ? 'active' : '' ?>">
-                    <i class="bi bi-geo-alt-fill"></i> Routes
-                </a>
-
-                <a href="users.php" class="nav-link <?= ($current == 'users.php') ? 'active' : '' ?>">
-                    <i class="bi bi-people-fill"></i> Users
-                </a>
-
-                <a href="sales.php" class="nav-link <?= ($current == 'sales.php') ? 'active' : '' ?>">
-                    <i class="bi bi-bar-chart-line-fill"></i> Sales
-                </a>
-
-                <hr>
-                <a href="logout.php" class="nav-link text-danger">
-                    <i class="bi bi-box-arrow-right"></i> Logout
-                </a>
-            </div>
+            <?php include 'sidebar.php'; ?>
 
 
 

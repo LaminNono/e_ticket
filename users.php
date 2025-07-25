@@ -66,17 +66,8 @@ if (isset($_POST['delete'])) {
 <body class="bg-light">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2 sidebar bg-primary text-white p-3" style="min-height:100vh;">
-                <h4 class="mb-4">Admin Panel</h4>
-                <a href="dashboard.php" class="nav-link text-white">Dashboard</a>
-                <a href="bookings.php" class="nav-link text-white">Bookings</a>
-                <a href="routes.php" class="nav-link text-white">Routes</a>
-                <a href="buses.php" class="nav-link text-white">Buses</a>
-                <a href="users.php" class="nav-link text-white fw-bold bg-info bg-opacity-25">Users</a>
-                <a href="sales.php" class="nav-link text-white">Sales</a>
-                <hr>
-                <a href="logout.php" class="nav-link text-danger">Logout</a>
-            </div>
+            <?php include 'sidebar.php'; ?>
+            <div class="col-md-10 p-4">
             <div class="col-md-10 p-4">
                 <h2 class="mb-4">User List</h2>
                 <?php if (!empty($edit_success)): ?>

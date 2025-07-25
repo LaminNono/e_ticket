@@ -27,17 +27,7 @@ $sales = $pdo->query("SELECT * FROM payments JOIN bookings USING(booking_id)")->
 <body class="bg-light">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2 sidebar bg-primary text-white p-3" style="min-height:100vh;">
-            <h4 class="mb-4">Admin Panel</h4>
-            <a href="dashboard.php" class="nav-link text-white">Dashboard</a>
-            <a href="bookings.php" class="nav-link text-white">Bookings</a>
-            <a href="routes.php" class="nav-link text-white">Routes</a>
-            <a href="buses.php" class="nav-link text-white">Buses</a>
-            <a href="users.php" class="nav-link text-white">Users</a>
-            <a href="sales.php" class="nav-link text-white fw-bold bg-info bg-opacity-25">Sales</a>
-            <hr>
-            <a href="logout.php" class="nav-link text-danger">Logout</a>
-        </div>
+        <?php include 'sidebar.php'; ?>
         <div class="col-md-10 p-4">
             <h2 class="mb-4">Sales / Payments</h2>
             <table class="table table-bordered table-hover bg-white">
