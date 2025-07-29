@@ -18,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($email === '' || $password === '') {
         $error = 'Email and Password are required.';
     } else {
-        /*  ▼▼ ONLY THESE LINES CHANGE ▼▼  */
+       
           $stmt = $pdo->prepare(
-    'SELECT user_id, name, role, password           -- role included
+    'SELECT user_id, name, role, password           
        FROM users
       WHERE email = ? LIMIT 1'
 );
@@ -28,20 +28,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $stmt->execute([$email]);
           $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-          if ($user && password_verify($password, $user['password'])) {  // ★ CHANGED
+          if ($user && password_verify($password, $user['password'])) {  
               session_regenerate_id(true);
-              $_SESSION['user_id'] = $user['user_id'];                   // ★ CHANGED
+              $_SESSION['user_id'] = $user['user_id'];                   
               $_SESSION['user']    = $user['name'];
-              $_SESSION['role']    = $user['role'];                       // ★ CHANGED
+              $_SESSION['role']    = $user['role'];                       
               $target = ($user['role'] === 'admin')
-          ? ADMIN_HOME         // resolves to dashboard.php
+          ? ADMIN_HOME         
           : 'index.php';
 header("Location: $target");
 exit();
 
               exit();
           }
-        /*  ▲▲ ONLY THESE LINES CHANGE ▲▲  */
+       
 
         $error = 'Invalid email or password.';
     }

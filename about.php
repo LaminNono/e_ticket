@@ -102,7 +102,7 @@
     <div class="container">
       <div class="row align-items-center" data-aos="fade-up">
         <div class="col-md-6 mb-4">
-          <img src="images/about-illustration.png" alt="About E-ticket" class="img-fluid rounded shadow-sm">
+          <img src="images/bus1.jpg" alt="About E-ticket" class="img-fluid rounded shadow-sm">
         </div>
         <div class="col-md-6">
           <h2>About E-ticket Myanmar</h2>

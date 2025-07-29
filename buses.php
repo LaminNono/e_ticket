@@ -71,7 +71,11 @@ if (isset($_POST['delete'])) {
     }
 }
 
-$buses = $pdo->query("SELECT * FROM buses")->fetchAll();
+$buses = $pdo->query("
+  SELECT b.*, r.origin, r.destination, r.depart_time, r.arrival_time, r.price
+  FROM buses b
+  JOIN routes r ON b.route_id = r.route_id
+")->fetchAll();
 $routes = $pdo->query("SELECT * FROM routes")->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -151,95 +155,80 @@ $routes = $pdo->query("SELECT * FROM routes")->fetchAll();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($buses as $b): ?>
-                        <tr>
-                            <td><?= $b['bus_id'] ?></td>
-                            <td><?php 
-                            foreach ($routes as $r) {
-                                if ($r['route_id'] == $b['route_id']) {
-                                    echo $r['origin'] . ' → ' . $r['destination'];
-                                    break;
-                                }
-                            }
-                        ?></td>
-                            <td><?= $b['bus_name'] ?></td>
-                            <td><?= $b['type'] ?></td>
-                            <td><?= $b['seat_count'] ?></td>
-                            <td><?= $b['departure_time'] ?></td>
-                            <td><?= $b['arrival_time'] ?></td>
-                            <td><?= $b['price'] ?></td>
-                            <td>
-                                <!-- Edit Button triggers modal -->
-                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                    data-bs-target="#editBusModal<?= $b['bus_id'] ?>">Edit</button>
-                                <form method="POST" class="d-inline" onsubmit="return confirm('Delete this bus?')">
-                                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                    <input type="hidden" name="delete" value="<?= $b['bus_id'] ?>">
-                                    <button type="submit" name="delete" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
-                                <!-- Edit Modal -->
-                                <div class="modal fade" id="editBusModal<?= $b['bus_id'] ?>" tabindex="-1"
-                                    aria-labelledby="editBusLabel<?= $b['bus_id'] ?>" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <form method="POST">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editBusLabel<?= $b['bus_id'] ?>">Edit
-                                                        Bus</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body row g-3">
-                                                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
-                                                    <input type="hidden" name="bus_id" value="<?= $b['bus_id'] ?>">
-                                                    <div class="col-12 mb-2">
-                                                        <select name="route_id" class="form-select" required>
-                                                            <?php foreach ($routes as $r): ?>
-                                                            <option value="<?= $r['route_id'] ?>"
-                                                                <?= $r['route_id'] == $b['route_id'] ? 'selected' : '' ?>>
-                                                                <?= $r['origin'] ?> → <?= $r['destination'] ?></option>
-                                                            <?php endforeach; ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-12 mb-2">
-                                                        <input type="text" name="bus_name" class="form-control"
-                                                            value="<?= $b['bus_name'] ?>" required>
-                                                    </div>
-                                                    <div class="col-12 mb-2">
-                                                        <input type="text" name="type" class="form-control"
-                                                            value="<?= $b['type'] ?>" required>
-                                                    </div>
-                                                    <div class="col-12 mb-2">
-                                                        <input type="number" name="seat_count" class="form-control"
-                                                            value="<?= $b['seat_count'] ?>" required>
-                                                    </div>
-                                                    <div class="col-12 mb-2">
-                                                        <input type="time" name="departure" class="form-control"
-                                                            value="<?= $b['departure_time'] ?>" required>
-                                                    </div>
-                                                    <div class="col-12 mb-2">
-                                                        <input type="time" name="arrival" class="form-control"
-                                                            value="<?= $b['arrival_time'] ?>" required>
-                                                    </div>
-                                                    <div class="col-12 mb-2">
-                                                        <input type="number" name="price" class="form-control"
-                                                            value="<?= $b['price'] ?>" required>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" name="edit" class="btn btn-primary">Save
-                                                        Changes</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+<?php foreach ($buses as $b): ?>
+    <tr>
+        <td><?= $b['bus_id'] ?></td>
+        <td><?= $b['origin'] ?> → <?= $b['destination'] ?></td>
+        <td><?= $b['bus_name'] ?></td>
+        <td><?= $b['type'] ?></td>
+        <td><?= $b['seat_count'] ?? 'N/A' ?></td>
+        <td><?= date('H:i', strtotime($b['depart_time'])) ?></td>
+        <td><?= date('H:i', strtotime($b['arrival_time'])) ?></td>
+        <td><?= $b['price'] ?> Ks</td>
+        <td>
+            <!-- Edit Button triggers modal -->
+            <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                data-bs-target="#editBusModal<?= $b['bus_id'] ?>">Edit</button>
+            <form method="POST" class="d-inline" onsubmit="return confirm('Delete this bus?')">
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                <input type="hidden" name="delete" value="<?= $b['bus_id'] ?>">
+                <button type="submit" name="delete" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editBusModal<?= $b['bus_id'] ?>" tabindex="-1"
+                aria-labelledby="editBusLabel<?= $b['bus_id'] ?>" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="POST">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editBusLabel<?= $b['bus_id'] ?>">Edit Bus</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body row g-3">
+                                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+                                <input type="hidden" name="bus_id" value="<?= $b['bus_id'] ?>">
+                                <div class="col-12 mb-2">
+                                    <select name="route_id" class="form-select" required>
+                                        <?php foreach ($routes as $r): ?>
+                                            <option value="<?= $r['route_id'] ?>" <?= $r['route_id'] == $b['route_id'] ? 'selected' : '' ?>>
+                                                <?= $r['origin'] ?> → <?= $r['destination'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
+                                <div class="col-12 mb-2">
+                                    <input type="text" name="bus_name" class="form-control" value="<?= $b['bus_name'] ?>" required>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <input type="text" name="type" class="form-control" value="<?= $b['type'] ?>" required>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <input type="number" name="seat_count" class="form-control" value="<?= $b['seat_count'] ?? 0 ?>" required>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <input type="time" name="departure" class="form-control" value="<?= date('H:i', strtotime($b['depart_time'])) ?>" required>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <input type="time" name="arrival" class="form-control" value="<?= date('H:i', strtotime($b['arrival_time'])) ?>" required>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <input type="number" name="price" class="form-control" value="<?= $b['price'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" name="edit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</tbody>
+
                 </table>
             </div>
         </div>

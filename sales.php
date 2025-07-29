@@ -47,7 +47,7 @@ $sales = $pdo->query("SELECT * FROM payments JOIN bookings USING(booking_id)")->
                         <td><?= $s['payment_id'] ?></td>
                         <td><?= $s['booking_id'] ?></td>
                         <td><?= $s['amount'] ?> MMK</td>
-                        <td><?= $s['method'] ?></td>
+                        <td><?= $s['payment_method'] ?></td>
                         <td><?= $s['status'] ?></td>
                         <td><?= $s['payment_date'] ?></td>
                     </tr>

@@ -353,7 +353,7 @@ foreach ($routes as $route) {
                     data-price="<?= $route['price'] ?>">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img src="<?= $route['image_path'] ?: 'images/bus-default.jpg' ?>"
+                            <img src="<?= $route['image_path'] ?: 'images/bus1.jpg' ?>"
                                 alt="<?= htmlspecialchars($route['bus_name']) ?>">
                         </div>
                         <div class="col-md-8">
